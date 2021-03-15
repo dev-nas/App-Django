@@ -1,0 +1,42 @@
+{# La balise "load" donne accès à de nouvelles balises de template qui sont définies #}
+{# dans une application Django. https://docs.djangoproject.com/fr/3.1/howto/custom-template-tags/ #}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} | Projet bonbons{% endblock title %}</title>
+    <link rel="stylesheet" href="{% static "css/style.css" %}">
+</head>
+<body>
+<div class="body">
+    <section class="header">
+        <div class="content">
+            <a href="/" class="logo-name">Projet Bonbons</a>
+        </div>
+    </section>
+    <section class="content">
+        <div class="content">
+            {# On ne l'a pas vu, mais cette partie est documentée dans la #}
+            {# documentation officielle de Django : #}
+            {# https://docs.djangoproject.com/fr/3.1/ref/contrib/messages/#module-django.contrib.messages #}
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            {% block content %}{% endblock content %}
+        </div>
+    </section>
+    <section class="footer">
+        <div class="content">
+            <p>Projet d'initiation Django</p>
+            <p>Première version, Steve Kossouho</p>
+        </div>
+    </section>
+</div>
+</body>
+</html>

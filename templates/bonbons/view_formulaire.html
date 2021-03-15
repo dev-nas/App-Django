@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}Créer un bonbon{{ block.super }}{% endblock title %}
+
+{% block content %}
+
+    {# Lorsque l'on utilise une instance de Form ou ModelForm dans un gabarit, #}
+    {# il faut se souvenir que cette instance effectue uniquement le rendu des #}
+    {# champs de formulaire HTML. Le rendu ne contient pas la balise HTML <form> #}
+    {# ni aucun bouton pour valide le formulaire. Il faut donc ajouter ces balises #}
+    {# HTML manuellement. #}
+    <form action="" method="post">
+        {# Django possède une protection automatique contre certaines attaques #}
+        {# qui consisteraient à faire visiter une URL malveillante à un utilisateur #}
+        {# de votre site, cette URL étant utilisée pour faire valider à votre utilisateur #}
+        {# des données de formulaire malveillantes. #}
+        {# Sans rentrer dans le détail, lorsque votre navigateur envoie des données #}
+        {# de formulaire à une page web, Django nécessite que ces données contiennent une #}
+        {# valeur qu'un site malveillant ne peut pas connaître. #}
+        {% csrf_token %} {# Cette valeur secrète correspond à un champ HTML <input type="hidden"> #}
+        {# Lorsqu'on affiche notre instance de formulaire, ça renvoie du HTML #}
+        {# qui contient les champs du formulaire, en l'occurrence le nom, la marque, etc. #}
+        {# La variable form possède aussi des méthodes pour afficher les champs un peu diffremment #}
+        {# par exemple {{ form.as_p }} affiche les champs dans des balises HTML de paragraphe #}
+        {# Plus d'info ici : https://docs.djangoproject.com/fr/3.1/topics/forms/#form-rendering-options #}
+        <table>
+            {{ form.as_table}}
+
+        </table>
+        <hr>
+        <input type="submit" value="Valider">
+        {{ form.non_field_errors }}
+    </form>
+
+{% endblock content %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{# Ici, le titre de notre onglet devient le nom du bonbon, auquel #}
+{# on ajoute le texte défini dans le block "title" du template parent, #}
+{# à savoir "base.html" #}
+{% block title %}{{ bonbon.nom }}{{ block.super }}{% endblock title %}
+
+{% block content %}
+    <h1>{{ bonbon.nom }}</h1>
+
+    <ul>
+        <li>Marque : {{ bonbon.marque }}</li>
+        <li>Goût : {{ bonbon.gout }}</li>
+        <li>Prix au paquet : {{ bonbon.prix }}€</li>
+        <li>Poids du paquet : {{ bonbon.poids }} grammes</li>
+        {# Vous pouvez aussi récupérer la valeur d'une méthode #}
+        {# de votre instance, à la condition que cette méthode #}
+        {# ne prenne pas de paramètre obligatoire autre que self #}
+        {% if bonbon.prix_au_kilo %} {# Si la méthode ne renvoie pas 0 ou None #}
+            {# On applique un filtre "floatformat", qui arrondit le nombre #}
+            {# à un chiffre après la virgule. #}
+            {# voir https://docs.djangoproject.com/fr/3.1/ref/templates/builtins/#floatformat #}
+            <li>Prix au kilo : {{ bonbon.prix_au_kilo|floatformat }}€/kg</li>
+        {% endif %}
+    </ul>
+    {# Ici, on va s'amuser à afficher les informations du fabricant pointé #}
+    {# par notre champ de clé étrangère de notre modèle #}
+    {# on ne les affiche que si un objet Fabricant a été sélectionné pour le bonbon #}
+    {% if bonbon.fabricant %}
+        <h2>Informations du fabricant</h2>
+        <ul>
+            {# On peut facilement récupérer l'attribut "nom" de l'objet de type Fabricant #}
+            {# pointé par notre attribut "fabricant" dans notre Bonbon #}
+            <li>Nom : {{ bonbon.fabricant.nom }}</li>
+            {# On applique un filtre "default": si la valeur est vide, afficher le texte "N/D" #}
+            <li>Site web : {{ bonbon.fabricant.url|default:"N/D" }}</li>
+            <li>Email : {{ bonbon.fabricant.email|default:"N/D" }}</li>
+            <li>Créé : {{ bonbon.fabricant.cree_le }}</li>
+        </ul>
+    {% endif %}
+    <p>
+        <a href="{% url "viewall" %}">Retourner à la liste des bonbons</a>
+    </p>
+
+{% endblock content %}

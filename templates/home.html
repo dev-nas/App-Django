@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{# Ici, on donne accès à de nouvelles balises de traduction, dont translate et blocktranslate #}
+{% load i18n %}
+
+{# Ici, le "block.super" correspond au texte qu'il y avait dans base.html #}
+{% block title %}Accueil{{ block.super }}{% endblock title %}
+{% block content %}
+
+    {# Via la balise translate, on affiche une chaîne traduisible #}
+    {# Voir https://docs.djangoproject.com/fr/3.1/topics/i18n/translation/#translate-template-tag #}
+    <h1>{% translate "Bienvenue dans notre projet Bonbons." %}</h1>
+
+    {# Via la balise blocktranslate, on traduit un plus gros bloc de texte, et #}
+    {# on aurait même pu insérer une variable dans cette chaîne à traduire. #}
+    <p>{% blocktranslate %}Vous avez correctement configuré votre serveur, et vous pouvez désormais
+        accéder aux pages du site pour examiner leur comportement et le lier au comportement du code.{% endblocktranslate %}</p>
+
+    <h2>{% translate "Quelques liens vers notre site" %}</h2>
+
+    <p>
+        {# La balise URL sert à retrouver une URL par son plutôt que sa valeur en dur #}
+        <a href="{% url "viewall" %}">Voir la liste de tous les bonbons</a>
+    </p>
+
+    <h3>Pages individuelles des bonbons</h3>
+    {% for bonbon in bonbons %}
+        <p>
+            {# Une URL qui a été définie avec des paramètres dynamiques #}
+            {# peut aussi être retrouvée avec la balise url. Il suffit de #}
+            {# passer les paramètres ainsi #}
+            {# https://docs.djangoproject.com/fr/3.1/ref/templates/builtins/#url #}
+            <a href="{% url "viewone" identifier=bonbon.id %}">
+                <strong>({{ bonbon.id }})</strong>
+                Voir le bonbon {{ bonbon.nom }}</a>
+        </p>
+    {% endfor %}
+
+    <h3>Pages de formulaires</h3>
+    <p>
+        <a href="{% url "formulaire" %}">Formulaire d'ajout de bonbon</a>
+    </p>
+    <p>
+        <a href="{% url "formulaire" %}">Formulaire de recherche de bonbon</a>
+    </p>
+
+{% endblock content %}

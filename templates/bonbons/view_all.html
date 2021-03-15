@@ -1,0 +1,26 @@
+{# Le gabarit parent, dont on personnalise les "blocs" ici, se trouve #}
+{# dans project/templates #}
+{% extends "base.html" %}
+
+{% block title %}Tous les bonbons{{ block.super }}{% endblock title %}
+
+{% block content %}
+
+    <h1>Liste des bonbons</h1>
+    {# Le template reçoit une variable contenant tous les bonbons #}
+    {# via la vue bonbons.views.view_all_bonbons, et y a accès via le nom #}
+    {# "bonbons" #}
+    {% for bonbon in bonbons %}
+        {# Afficher un lien vers la page individuelle du bonbon #}
+        <h2>
+            {{ bonbon.id }}
+            <a href="{% url "viewone" identifier=bonbon.id %}" title="En savoir plus">
+                {{ bonbon.nom }}
+            </a>
+        </h2>
+        <ul>
+            <li>Marque : {{ bonbon.marque }}</li>
+            <li>Prix : {{ bonbon.prix }}€</li>
+        </ul>
+    {% endfor %}
+{% endblock content %}
